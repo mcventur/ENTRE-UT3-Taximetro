@@ -3,27 +3,57 @@
  *  La clase modela un taximetro simplificado que recoge estadísticas
  *  de las carreras realizadas, tiempo total, distancia...
  * 
- * @author  
+ * @Antonio Aguilera  
  */
 public class Taximetro
 {
-    //Constantes y atributos
+    //CONSTANTES
+    private final double BASE_NORMAL = 3.80;
+    private final double BASE_AMPLIADA = 4.00;
+    private final double KM_NORMAL = 0.75;
+    private final double KM_AMPLIADA = 1.10;
+    private final double SABADO = 6;
+    private final double DOMINGO = 7;
     
+    //ATRIBUTOS
+    private String matricula;
+    private int pesoVehiculo;
+    private float coeficienteAerodinamico;
+    private double consumoMedio100Kms;
+    private int totalCarrerasSabado;
+    private int totalCarrerasDomingo;
+    private int totalDistanciaLaborales;
+    private int totalDistanciaFinde;
+    private int minutos;
+    private double importeFacturado;
+    private double maxFacturaNormal;
+    private double maxFacturaAmpliada;
     
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
      * El resto de atributos se ponen a 0
      */
-    public Taximetro()    {
-
+    public Taximetro(String queMatricula)    {
+     matricula = queMatricula;
+     pesoVehiculo = 0;
+     coeficienteAerodinamico = 0;
+     consumoMedio100Kms = 0;
+     totalCarrerasSabado = 0;
+     totalCarrerasDomingo = 0;
+     totalDistanciaLaborales = 0;
+     totalDistanciaFinde = 0;
+     minutos = 0;
+     importeFacturado = 0;
+     maxFacturaNormal = 0;
+     maxFacturaAmpliada = 0;
     }
 
     /**
      * Accesor para la matricula
      */
-    public       getMatricula() {
-
+    public String getMatricula() {
+        return matricula;
     }
 
     /**
@@ -31,7 +61,7 @@ public class Taximetro
      * (Leer enunciado)
      */
     public void configurar(double coefAerodinamico, int pesoKg) {
-
+        consumoMedio100Kms = (pesoKg * coefAerodinamico)/100;
     }
 
     /**
@@ -48,7 +78,7 @@ public class Taximetro
      *   (leer enunciado del ejercicio)
      */
     public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
-
+        
     }
     
     /**
@@ -59,9 +89,7 @@ public class Taximetro
      *  
      */
     public void printConfiguracion() {
-
         
-
     }
     
     /**
@@ -72,9 +100,7 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
-
         
-
     }    
     
     /**
@@ -82,9 +108,7 @@ public class Taximetro
      *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarreras() {
-
-         
-
+        return "";
     }    
     
     /**
@@ -94,9 +118,7 @@ public class Taximetro
      *  
      */    
     public void reset() {
-
         
-
     }    
 
 }
