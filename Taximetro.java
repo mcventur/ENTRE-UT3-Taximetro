@@ -3,19 +3,47 @@
  *  La clase modela un taximetro simplificado que recoge estadísticas
  *  de las carreras realizadas, tiempo total, distancia...
  * 
- * @author  
+ * @author Nidae Asrih
  */
 public class Taximetro
 {
     //Constantes y atributos
+    private final double BASE_NORMAL = 3.80; // De lunes a viernes 
+    private final double BASE_AMPLIADA = 4.00; // Finde
     
+    private final double KM_NORMAL = 0.75;
+    private final double KM_AMPLIADA = 1.10;
+    
+    private final int SABADO = 6;
+    private final int DOMINGO = 7;
+    
+    // ATRIBUTOS
+    private String matricula;
+    private int pesoVehiculo;
+    private double coeficienteAerodinamico;
+    private double consumoMedio100kms;
+    //recuento de carreras:
+    private int totalCarrerasLaborales;
+    private int totalCarrerasSabado;
+    private int totalCarrerasDomingo;
+    // recuento distancia en laborables/findes:
+    private int totalDistanciaLaborales;
+    private int totalDistanciaFinde;
+    //totales de tiempo y estadisticas:
+    private int tiempo;
+    private double importeFacturado;
+    private double maxFacturaNormal;
+    private double maxFacturaAmpliada;
     
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
      * El resto de atributos se ponen a 0
      */
-    public Taximetro()    {
+    public Taximetro(String matri)    {
+        matricula = matri;
+        pesoVehiculo = 0;
+        
 
     }
 
