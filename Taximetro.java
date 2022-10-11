@@ -168,7 +168,7 @@ public class Taximetro
         */
     }
     
-    public String testMin(double posibleMinimo,int indice)
+    public void testMin(double posibleMinimo,int indice)
     {
         switch(indice){
             case 1:
