@@ -239,8 +239,20 @@ public class Taximetro
      *  
      */    
     public void reset() {
-
-
+        matricula = "";
+        pesoVehiculo = 0;
+        coeficienteAerodinamico = 0;
+        consumoMedio100Kms = 0;
+        totalCarrerasLaborales = 0;
+        totalCarrerasSabado = 0;
+        totalCarrerasDomingo = 0;
+        totalDistanciaLaborales = 0;
+        totalDistanciaFinde = 0;
+        tiempo = 0;
+        importeFacturado = 0;
+        maxFacturaNormal = 0;
+        maxFacturaAmpliada = 0;
+        diaMaxCarrera=0;
     }    
 
 }
