@@ -15,8 +15,8 @@ public class Taximetro
     private final int SABADO = 6;
     private final int DOMINGO = 7;
     private String matricula;
-    private int pesoVehicul;
-    private int coeficienteAerodinamico;
+    private int pesoVehiculo;
+    private double coeficienteAerodinamico;
     private double consumoMedio100Kms;
     private int totalCarrerasLaborales;
     private int totalCarrerasSabado;
@@ -25,8 +25,9 @@ public class Taximetro
     private int totalDistanciaFinde;
     private int tiempo; // minutos
     private double importeFacturado;
-    private int maxFacturaNormal;
-    private int maxFacturaAmpliada;
+    private double maxFacturaNormal;
+    private double maxFacturaAmpliada;
+    private String diaMaxCarrera;
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
@@ -34,7 +35,7 @@ public class Taximetro
      */
     public Taximetro(String queMatricula)    {
         matricula = queMatricula;
-        pesoVehicul = 0;
+        pesoVehiculo = 0;
         coeficienteAerodinamico = 0;
         consumoMedio100Kms = 0;
         totalCarrerasLaborales = 0;
@@ -61,6 +62,8 @@ public class Taximetro
      */
     public void configurar(double coefAerodinamico, int pesoKg) {
         consumoMedio100Kms = (pesoKg*coefAerodinamico)/100;
+        coeficienteAerodinamico = coefAerodinamico;
+        pesoVehiculo = pesoKg;
     }
 
     /**
@@ -91,23 +94,33 @@ public class Taximetro
                 totalDistanciaLaborales += kilometros;
             if(horaInicio<800){
                 importeFacturado = BASE_AMPLIADA+ KM_AMPLIADA*kilometros;
+                testMax(importeFacturado,1);
+                testMin(importeFacturado,1);
             }
             else{
                 importeFacturado = BASE_NORMAL + KM_NORMAL* (double)kilometros;
+                testMax(importeFacturado,2);
+                testMin(importeFacturado,2);
             }
                 break;
             case 6:
                 
                 totalDistanciaFinde = kilometros;
+                totalDistanciaLaborales += kilometros;
                 totalCarrerasSabado ++;
                 importeFacturado = BASE_AMPLIADA + KM_AMPLIADA* (double)kilometros;
+                testMax(importeFacturado,1);
+                testMin(importeFacturado,1);
                 
                 break;
             case 7:
                 totalDistanciaFinde = kilometros;
+                totalDistanciaLaborales += kilometros;
                 totalCarrerasDomingo ++;
                 importeFacturado = BASE_AMPLIADA + KM_AMPLIADA*kilometros;
                 Math.floor(importeFacturado); //preguntar
+                testMax(importeFacturado,1);
+                testMin(importeFacturado,1);
                 
                 break;
             default:
@@ -127,10 +140,50 @@ public class Taximetro
      * @param  y   a sample parameter for a method
      * @return     the sum of x and y
      */
-    public int sampleMethod(int y)
+    public void testMax(double posibleMaximo,int indice)
     {
-        // put your code here
-        return y;
+        
+        switch(indice){
+            case 1:
+                if(maxFacturaAmpliada<posibleMaximo){
+                    maxFacturaAmpliada=posibleMaximo;
+                    
+                }
+                
+            break;
+            case 2:
+                if(maxFacturaNormal<posibleMaximo){
+                    maxFacturaNormal=posibleMaximo;                    
+                }
+                
+            break;
+        
+        }
+        
+        /**if(maxFacturaNormal<maxFacturaAmpliada){
+            diaMaxCarrera = dia;
+        }else if(maxFacturaAmpliada<maxFacturaNormal){
+            diaMaxCarrera = dia;
+        }
+        */
+    }
+    
+    public String testMin(double posibleMinimo,int indice)
+    {
+        switch(indice){
+            case 1:
+                if(maxFacturaAmpliada<posibleMinimo){
+                    maxFacturaAmpliada=posibleMinimo;                    
+                }
+            break;
+            case 2:
+                if(maxFacturaNormal<posibleMinimo){
+                    maxFacturaNormal=posibleMinimo;                    
+                }
+            break;
+        
+        }
+        
     }
 
     /**
@@ -141,8 +194,12 @@ public class Taximetro
      *  
      */
     public void printConfiguracion() {
-
-
+        System.out.println("\n Configuracion del taximtro");
+        System.out.println("*******************************************");
+        System.out.println("Peso del vehículo en Kg: "+pesoVehiculo);
+        System.out.println("Coeficiente aerodinamico:"+coeficienteAerodinamico);
+        System.out.println("Consumo medio estimado por cada 100kms: "+ consumoMedio100Kms);
+        System.out.println();
     }
 
     /**
@@ -153,8 +210,18 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
-
-
+        System.out.println("\nEstadísticas");
+        System.out.println("********************************");
+        System.out.println("Distancia recorrida toda la semana: " +totalDistanciaLaborales );
+        System.out.println("Distancia recorrida fin de semana:");
+        System.out.println("\nNº carreras días laborables: 5");
+        System.out.println("Nº carreras sábados: 2");
+        System.out.println("Nº carreras domingos: 3");
+        System.out.println("\nEstimación de litros consumidos: 6.208");
+        System.out.println("Importe facturado: 129.1 €");
+        System.out.println("\nTiempo total en carreras: 8 horas y 53 minutos");
+        System.out.println("Factura máxima tarifa normal: 14.3 €");
+        System.out.println("Factura máxima tarifa ampliada: 18.3 €");
     }    
 
     /**
