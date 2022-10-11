@@ -3,27 +3,56 @@
  *  La clase modela un taximetro simplificado que recoge estadísticas
  *  de las carreras realizadas, tiempo total, distancia...
  * 
- * @author  
+ * @aitor
  */
 public class Taximetro
 {
     //Constantes y atributos
-    
-    
+    private final double BASE_NORMAL = 3.80;
+    private final double BASE_AMPLIADA = 4.00;
+    private final double KM_NORMAL = 0.75;
+    private final double KM_AMPLIADA = 1.10;
+    private final int SABADO = 6;
+    private final int DOMINGO = 7;
+    private String matricula;
+    private int pesoVehicul;
+    private int coeficienteAerodinamico;
+    private double consumoMedio100Kms;
+    private int totalCarrerasLaborales;
+    private int totalCarrerasSabado;
+    private int totalCarrerasDomingo;
+    private int totalDistanciaLaborales;
+    private int totalDistanciaFinde;
+    private int tiempo; // minutos
+    private double importeFacturado;
+    private int maxFacturaNormal;
+    private int maxFacturaAmpliada;
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
      * El resto de atributos se ponen a 0
      */
-    public Taximetro()    {
-
+    public Taximetro(String queMatricula)    {
+        matricula = queMatricula;
+        pesoVehicul = 0;
+        coeficienteAerodinamico = 0;
+        consumoMedio100Kms = 0;
+        totalCarrerasLaborales = 0;
+        totalCarrerasSabado = 0;
+        totalCarrerasDomingo = 0;
+        totalDistanciaLaborales = 0;
+        totalDistanciaFinde = 0;
+        tiempo = 0;
+        importeFacturado = 0;
+        maxFacturaNormal = 0;
+        maxFacturaAmpliada = 0;
     }
 
     /**
      * Accesor para la matricula
      */
-    public       getMatricula() {
-
+    public String getMatricula() {
+        return matricula;
     }
 
     /**
@@ -31,7 +60,7 @@ public class Taximetro
      * (Leer enunciado)
      */
     public void configurar(double coefAerodinamico, int pesoKg) {
-
+        consumoMedio100Kms = (pesoKg*coefAerodinamico)/100;
     }
 
     /**
@@ -48,9 +77,62 @@ public class Taximetro
      *   (leer enunciado del ejercicio)
      */
     public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
-
+        int minutosInicio = (horaInicio / 100)* 60 + (horaInicio % 100);
+        int minutosFin = (horaFin / 100)* 60 + (horaFin % 100);
+        tiempo = minutosInicio - minutosFin;
+        switch(dia){
+            
+            case 1:
+            case 2:
+            case 3: 
+            case 4: 
+            case 5:
+                totalCarrerasLaborales ++;
+                totalDistanciaLaborales += kilometros;
+            if(horaInicio<800){
+                importeFacturado = BASE_AMPLIADA+ KM_AMPLIADA*kilometros;
+            }
+            else{
+                importeFacturado = BASE_NORMAL + KM_NORMAL* (double)kilometros;
+            }
+                break;
+            case 6:
+                
+                totalDistanciaFinde = kilometros;
+                totalCarrerasSabado ++;
+                importeFacturado = BASE_AMPLIADA + KM_AMPLIADA* (double)kilometros;
+                
+                break;
+            case 7:
+                totalDistanciaFinde = kilometros;
+                totalCarrerasDomingo ++;
+                importeFacturado = BASE_AMPLIADA + KM_AMPLIADA*kilometros;
+                Math.floor(importeFacturado); //preguntar
+                
+                break;
+            default:
+                System.out.println("dia incorrecto");
+                break;
+        }
+        //totalCarrerasLaborales = 0;
+        //totalCarrerasSabado = 0;
+        //totalCarrerasDomingo = 0;
+        //totalDistanciaLaborales = 0;
+        //totalDistanciaFinde = 0;
     }
     
+    /**
+     * An example of a method - replace this comment with your own
+     *
+     * @param  y   a sample parameter for a method
+     * @return     the sum of x and y
+     */
+    public int sampleMethod(int y)
+    {
+        // put your code here
+        return y;
+    }
+
     /**
      * Muestra en pantalla la configuración del taxímetro
      * (matricula, coeficiente aerodinámico, peso y consumo a los 100)
@@ -60,10 +142,9 @@ public class Taximetro
      */
     public void printConfiguracion() {
 
-        
 
     }
-    
+
     /**
      * Muestra en pantalla información acerca de la distancia recorrida,
      * carreras, tiempo total, ....
@@ -73,20 +154,17 @@ public class Taximetro
      */
     public void printEstadísticas() {
 
-        
 
     }    
-    
+
     /**
      *  Calcula y devuelve un String que representa el nombre del día
      *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarreras() {
-
-         
+        return "String algo" ;
 
     }    
-    
     /**
      * Restablecer los valores iniciales del taximetro
      * Todos los atributos se ponen a cero
@@ -95,7 +173,6 @@ public class Taximetro
      */    
     public void reset() {
 
-        
 
     }    
 
