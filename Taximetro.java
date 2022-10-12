@@ -7,7 +7,8 @@
  */
 public class Taximetro
 {
-    //Constantes:
+    /** Constantes:
+    */
     // Base dias laborales,empezando despues de las 8:00
     private final double BASE_NORMAL = 3.80;
     // Base fin de samana o cualquier dia antes de las 8:00
@@ -20,7 +21,8 @@ public class Taximetro
     private final int SABADO = 6;
     private final int DOMINGO = 7;
     
-    // Atributos:
+    /** Atributos:
+    */
     // Fijos de cada taxi:
     private String matricula;
     private int pesoVehiculo;
@@ -91,52 +93,85 @@ public class Taximetro
      *   (leer enunciado del ejercicio)
      */
     public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
+        //Variables locales para guardar y modificar los parametros  int horaInicio y int horaFin
+        int horaInicioCorregida = horaInicio;
+        int horaFinCorregida = horaFin;
+        /**
+         * Habia un problema con los parametros horaInicio y horaFin que al introducirse 
+         * como 0xx ocasionaba un error de cálculo, intenté quitar el 0 del principio, 
+         * pero en realidad el problema es que el valor del parametro 
+         * que llega No tiene un 0 delante, 015 en realidad entra como 13. 
+         * 
+         * Para solucionarlo hay es pasar el numero 13, a sus cifras en Octal.
+         * 13%8 + 10*(13/8) = 15
+         * 
+         * Pero esto solo funciona por que los numero que empiezan por 0xx pueden ir de
+         * 0:00 a 0:57 (058 y 059 dara error) y como 57 en octal es 
+         * 47 decimal, y a partir de la 1:00 todas las hora son mayores que 100, 
+         * si horaInicio o horaFin son menores que 100 (o que 48) sabemos que estamos hablando
+         * de un imput tipo 0xx, que se ha traducido a cifras decimales. 
+         * 
+         * Sacamos las cifras que tendria en base octal, y recuperamos el imput original, 
+         * pero sin el 0 delante.
+         */
+        if (horaInicio<100) horaInicioCorregida = horaInicio%8 +10*(horaInicio/8);
+        if (horaFin<100) horaFinCorregida = horaFin%8 +10*(horaFin/8);
+        
+        //Variable formal que guarda el importe de una carrera concreta segun el valor que 
+        //se le asigne en base a las tarifas, y luego se suma al atributo importe.
         double esteImporte;
-        int minutos = (horaFin/100 - horaInicio/100) * 60 + horaFin % 100 - horaInicio % 100;
-    
+        
+        int minutos = (horaFinCorregida/100 - horaInicioCorregida/100) * 60 + horaFinCorregida % 100 - horaInicioCorregida % 100;
+        
         switch (dia){
             case 1: case 2: case 3: case 4: case 5:
+            //Si estamos en case 1-5, miramos si es una carrera antes de las 8 o despues, para aplicar la tarifa adecuada.
                 if (horaInicio < 800){
+                    // esteIporte guarda el valor del importe de esta carrera
                     esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
+                    // maxFacturaAmpliada guarda el importe mas alto hasta el momento,compara el importe de esta carrera, con su valor, y se actualiza con el valor mas grande.
                     maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
                 }
                 else{
                     esteImporte = Math.floor((BASE_NORMAL + KM_NORMAL * kilometros) * 100)/100;
                     maxFacturaNormal = Math.max(maxFacturaNormal,esteImporte);
                 }
+                // Cuenta el numero de veces que usamos el metodo, osea cuantas carreras hace el taxi. 
                 totalCarrerasLaborales++;
+                // totalDistanciaLaborales guarda la distancia sumada de todas las carreras. Y se actualiza sumando a su valor los kilometros de esta carrera
                 totalDistanciaLaborales+= kilometros;
                 break;
+                
+                /**
+                 * Como te parece mejor el case 6 y 7?
+                 */
+                
             case 6: case 7:
                 if (dia == SABADO) totalCarrerasSabado++; else totalCarrerasDomingo++; 
                 totalDistanciaFinde+= kilometros;
                 esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
                 maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
                 break;
+            // case 6: 
+                // totalCarrerasSabado++; 
+                // totalDistanciaFinde+= kilometros;
+                // esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
+                // maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
+                // break;    
+            // case 7:
+                // totalCarrerasDomingo++;
+                // totalDistanciaFinde+= kilometros;
+                // esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
+                // maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
+                // break; 
             default:
                 esteImporte = 0;
                 System.out.println("Se ha introducido un dato erroneo");
             }
+        // Importe total y tiempo total se actualizan sumando los de esta carrera
         importeFacturado+= esteImporte;
         tiempo+= minutos; 
     }
-        
-         
-    /**    
-    public void registrarCarreraV2(int kilometros, int dia, int horaInicio, int horaFin) {
-        double esteImporte;
-        boolean noche = horaInicio < 800;
-        boolean laborable = 7 - dia >= 2;
-        int minutos = (horaFin/100 - horaInicio/100) * 60 + horaFin % 100 - horaInicio % 100;    
-        If (laborable && noche){
-            totalCarrerasLaborales++;
-            totalDistanciaLaborales+= kilometros;
-        }
-        else{
-            
-        }
-    }
-    */
    
     /**
      * Muestra en pantalla la configuración del taxímetro
@@ -180,15 +215,40 @@ public class Taximetro
      *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarreras() {
+        // El valor maximo de entre totalCarrerasSabado,totalCarrerasDomingo,totalCarrerasLaborales
         double maximo = Math.max(totalCarrerasLaborales,Math.max(totalCarrerasSabado,totalCarrerasDomingo));
+        // En esta variable guardaremos los String correspondientes a los maximos entre totalCarrerasSabado,totalCarrerasDomingo,totalCarrerasLaborales
         String diaGuardado = "";
 
         System.out.println("El dia que mas carreras se han realizado");
-        if (totalCarrerasLaborales == maximo) diaGuardado+= " LABORABLES ";
-        if (totalCarrerasSabado == maximo) diaGuardado+= " SABADO ";
-        if (totalCarrerasLaborales == maximo) diaGuardado+= " DOMINGO ";
+        if (totalCarrerasLaborales == maximo) diaGuardado+= " LABORABLES";
+
+        if (totalCarrerasSabado == maximo) diaGuardado+= " SABADO";
+
+        if (totalCarrerasDomingo == maximo) diaGuardado+= " DOMINGO";
+
+
         return diaGuardado; 
     }    
+    /**
+     * Cual te parece mejor?
+     */
+    public String diaMayorNumeroCarrerasV2() {
+        String diaGuardado = "";
+
+        System.out.println("El dia que mas carreras se han realizado");
+        
+        if (totalCarrerasLaborales >=totalCarrerasSabado && totalCarrerasLaborales >= totalCarrerasDomingo) 
+        diaGuardado+= " LABORABLES";
+        
+        if (totalCarrerasSabado >=totalCarrerasLaborales && totalCarrerasSabado >= totalCarrerasDomingo) 
+        diaGuardado+= " SABADO";
+        
+        if (totalCarrerasDomingo >=totalCarrerasLaborales && totalCarrerasDomingo >= totalCarrerasSabado) 
+        diaGuardado+= " DOMINGO";
+
+        return diaGuardado; 
+    } 
     
     /**
      * Restablecer los valores iniciales del taximetro
