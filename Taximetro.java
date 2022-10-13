@@ -27,7 +27,6 @@ public class Taximetro
     private double importeFacturado;
     private double maxFacturaNormal;
     private double maxFacturaAmpliada;
-    private String diaMaxCarrera;
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
@@ -82,7 +81,8 @@ public class Taximetro
     public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
         int minutosInicio = (horaInicio / 100)* 60 + (horaInicio % 100);
         int minutosFin = (horaFin / 100)* 60 + (horaFin % 100);
-        tiempo = minutosInicio - minutosFin;
+        tiempo +=  minutosFin-minutosInicio;
+
         switch(dia){
             
             case 1:
@@ -93,34 +93,33 @@ public class Taximetro
                 totalCarrerasLaborales ++;
                 totalDistanciaLaborales += kilometros;
             if(horaInicio<800){
-                importeFacturado = BASE_AMPLIADA+ KM_AMPLIADA*kilometros;
-                testMax(importeFacturado,1);
-                testMin(importeFacturado,1);
+                importeFacturado += BASE_AMPLIADA+ KM_AMPLIADA*kilometros;
+                testMax((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
+                testMin((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
             }
             else{
-                importeFacturado = BASE_NORMAL + KM_NORMAL* (double)kilometros;
-                testMax(importeFacturado,2);
-                testMin(importeFacturado,2);
+                importeFacturado += BASE_NORMAL + KM_NORMAL* (double)kilometros;
+                testMax((BASE_NORMAL + KM_NORMAL * (double)kilometros),2);
+                testMin((BASE_NORMAL + KM_NORMAL * (double)kilometros),2);
             }
                 break;
             case 6:
                 
-                totalDistanciaFinde = kilometros;
-                totalDistanciaLaborales += kilometros;
+                totalDistanciaFinde += kilometros;
                 totalCarrerasSabado ++;
-                importeFacturado = BASE_AMPLIADA + KM_AMPLIADA* (double)kilometros;
-                testMax(importeFacturado,1);
-                testMin(importeFacturado,1);
+                importeFacturado += BASE_AMPLIADA + KM_AMPLIADA* (double)kilometros;
+                testMax((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
+                testMin((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
                 
                 break;
             case 7:
-                totalDistanciaFinde = kilometros;
-                totalDistanciaLaborales += kilometros;
+                totalDistanciaFinde += kilometros;
                 totalCarrerasDomingo ++;
-                importeFacturado = BASE_AMPLIADA + KM_AMPLIADA*kilometros;
+                importeFacturado += BASE_AMPLIADA + KM_AMPLIADA*kilometros;
+                
                 Math.floor(importeFacturado); //preguntar
-                testMax(importeFacturado,1);
-                testMin(importeFacturado,1);
+                testMax((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
+                testMin((BASE_AMPLIADA + KM_AMPLIADA*kilometros),1);
                 
                 break;
             default:
@@ -210,18 +209,21 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
+        int tiempoHoras= tiempo/60;
+        int timepoMins=tiempo%60;
+        int totalDist=totalDistanciaLaborales+totalDistanciaFinde;
         System.out.println("\nEstadísticas");
-        System.out.println("********************************");
-        System.out.println("Distancia recorrida toda la semana: " +totalDistanciaLaborales );
-        System.out.println("Distancia recorrida fin de semana:");
-        System.out.println("\nNº carreras días laborables: 5");
-        System.out.println("Nº carreras sábados: 2");
-        System.out.println("Nº carreras domingos: 3");
-        System.out.println("\nEstimación de litros consumidos: 6.208");
-        System.out.println("Importe facturado: 129.1 €");
-        System.out.println("\nTiempo total en carreras: 8 horas y 53 minutos");
-        System.out.println("Factura máxima tarifa normal: 14.3 €");
-        System.out.println("Factura máxima tarifa ampliada: 18.3 €");
+        System.out.println("******************************************");
+        System.out.println("Distancia recorrida toda la semana: " +totalDist );
+        System.out.println("Distancia recorrida fin de semana:"+totalDistanciaFinde);
+        System.out.println("\nNº carreras días laborables: "+totalCarrerasLaborales);
+        System.out.println("Nº carreras sábados: "+totalCarrerasSabado);
+        System.out.println("Nº carreras domingos: "+totalCarrerasDomingo);
+        System.out.println("\nEstimación de litros consumidos: "+consumoMedio100Kms);
+        System.out.println("Importe facturado: "+ importeFacturado+" €");
+        System.out.println("\nTiempo total en carreras:  "+tiempoHoras+"h"+timepoMins+"mins");
+        System.out.println("Factura máxima tarifa normal: "+ BASE_NORMAL+" €");
+        System.out.println("Factura máxima tarifa ampliada: "+ BASE_AMPLIADA+" €");
     }    
 
     /**
@@ -229,8 +231,23 @@ public class Taximetro
      *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarreras() {
-        return "String algo" ;
-
+        if(totalCarrerasLaborales>totalCarrerasSabado && totalCarrerasLaborales>totalCarrerasDomingo) {
+            if(totalCarrerasLaborales==totalCarrerasSabado){
+                return "LABORALES y SÁBADO";
+            }else if(totalCarrerasLaborales==totalCarrerasDomingo){
+                return "LABORALES y DOMINGO";
+            }else{
+                return "LABORALES";
+            }
+        }else if (totalCarrerasSabado>totalCarrerasLaborales && totalCarrerasSabado>totalCarrerasDomingo ){
+            if(totalCarrerasSabado==totalCarrerasDomingo){
+                return  "SABADO y DOMIGO";
+            }else{
+                return  "SABADO";
+            }            
+        }else {
+            return  "DOMINGO";
+        }
     }    
     /**
      * Restablecer los valores iniciales del taximetro
@@ -252,7 +269,7 @@ public class Taximetro
         importeFacturado = 0;
         maxFacturaNormal = 0;
         maxFacturaAmpliada = 0;
-        diaMaxCarrera=0;
+
     }    
 
 }
