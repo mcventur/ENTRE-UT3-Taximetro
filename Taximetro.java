@@ -4,6 +4,7 @@
  *  de las carreras realizadas, tiempo total, distancia...
  * 
  * @author  Adrian Vera
+ * @version 0.0.2
  */
 public class Taximetro
 {
@@ -198,12 +199,13 @@ public class Taximetro
      */
     public String diaMayorNumeroCarreras()
     {
-        if(this.totalCarrerasSabado == this.totalCarrerasDomingo) return "SABADO DOMINGO";
-        if(this.totalCarrerasSabado == this.totalCarrerasLaborales) return "SABADO LABORABLES";
-        if(this.totalCarrerasDomingo == this.totalCarrerasLaborales) return "LABORABLES DOMINGO";
+        if(this.totalCarrerasLaborales > this.totalCarrerasSabado && this.totalCarrerasLaborales > this.totalCarrerasDomingo) return "LABORABLES";
+        if(this.totalCarrerasSabado > this.totalCarrerasDomingo && this.totalCarrerasSabado > this.totalCarrerasLaborales) return "SÁBADO";
+        if(this.totalCarrerasDomingo > this.totalCarrerasSabado && this.totalCarrerasDomingo > this.totalCarrerasLaborales) return "DOMINGO";
         
-        if(this.totalCarrerasLaborales > this.totalCarrerasDomingo || this.totalCarrerasLaborales > this.totalCarrerasSabado) return "LABORABLES";
-        if(this.totalCarrerasDomingo > this.totalCarrerasSabado || this.totalCarrerasDomingo > this.totalCarrerasLaborales) return "DOMINGO";
+        if(this.totalCarrerasLaborales == this.totalCarrerasSabado) return "LABORABLES SÁBADO";
+        if(this.totalCarrerasLaborales == this.totalCarrerasDomingo) return "LABORABLES DOMINGO";
+        if(this.totalCarrerasSabado == this.totalCarrerasDomingo) return "SÁBADO DOMINGO";
         
         return "";
     }    
