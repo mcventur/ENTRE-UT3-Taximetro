@@ -1,7 +1,4 @@
 #BlueJ package file
-dependency1.from=DemoTaximetro
-dependency1.to=Taximetro
-dependency1.type=UsesDependency
 editor.fx.0.height=1039
 editor.fx.0.width=974
 editor.fx.0.x=953
@@ -16,7 +13,7 @@ package.editor.x=0
 package.editor.y=0
 package.frame.height=1048
 package.frame.width=1936
-package.numDependencies=1
+package.numDependencies=0
 package.numTargets=2
 package.showExtends=true
 package.showUses=true

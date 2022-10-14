@@ -154,9 +154,9 @@ public class Taximetro
         System.out.println("Estimación de litros consumidos: " + litros);
         System.out.println("Importe facturado: " + importeFacturado);
         
-        System.out.println("Tiempo total en carreras: " + pesoVehiculo);
-        System.out.println("Factura máxima tarifa normal: " + pesoVehiculo);
-        System.out.println("Factura máxima tarifa ampliada: " + pesoVehiculo);
+        System.out.println("Tiempo total en carreras: " + );
+        System.out.println("Factura máxima tarifa normal: " + );
+        System.out.println("Factura máxima tarifa ampliada: " + );
 
     }    
     
