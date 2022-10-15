@@ -45,7 +45,7 @@ public class DemoTaximetro
         configurar(0.6, 1850);
         distancias = new int[]{11, 15, 2, 17, 9, 8, 6, 16, 10, 14 };
         dias = new int[]{1, 2, 7, 5, 5, 6, 6, 7, 7, 7 };
-        horasInicio = new int[]{1450, 2210, 1600, 730, 2117, 2045, 2210, 015, 1145, 635};
+        horasInicio = new int[]{1450, 2210, 1600, 730, 2117, 2045, 2210, 15, 1145, 635};
         horasFin = new int[]{1525, 2320, 1610, 910, 2150, 2110, 2310, 150, 1225, 900};
         registrarCarreras(distancias, dias, horasInicio, horasFin);
         mostrarEstadisticas();
