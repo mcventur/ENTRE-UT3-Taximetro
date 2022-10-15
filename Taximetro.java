@@ -97,21 +97,7 @@ public class Taximetro
         int horaInicioCorregida = horaInicio;
         int horaFinCorregida = horaFin;
         /**
-         * Habia un problema con los parametros horaInicio y horaFin que al introducirse 
-         * como 0xx ocasionaba un error de cálculo, intenté quitar el 0 del principio, 
-         * pero en realidad el problema es que el valor del parametro 
-         * que llega No tiene un 0 delante, 015 en realidad entra como 13. 
-         * 
-         * Para solucionarlo hay es pasar el numero 13, a sus cifras en Octal.
-         * 13%8 + 10*(13/8) = 15
-         * 
-         * Pero esto solo funciona por que los numero que empiezan por 0xx pueden ir de
-         * 0:00 a 0:57 (058 y 059 dara error) y como 57 en octal es 
-         * 47 decimal, y a partir de la 1:00 todas las hora son mayores que 100, 
-         * si horaInicio o horaFin son menores que 100 (o que 48) sabemos que estamos hablando
-         * de un imput tipo 0xx, que se ha traducido a cifras decimales. 
-         * 
-         * Sacamos las cifras que tendria en base octal, y recuperamos el imput original, 
+         * Cuando el imput horaInicio o horaFin sea tipo 0xx, sacamos las cifras que tendria en base octal, las tomamos como si fueran decimal, y recuperamos el imput originalmente pretendido, 
          * pero sin el 0 delante.
          */
         if (horaInicio<100) horaInicioCorregida = horaInicio%8 +10*(horaInicio/8);
@@ -122,7 +108,7 @@ public class Taximetro
         double esteImporte;
         
         int minutos = (horaFinCorregida/100 - horaInicioCorregida/100) * 60 + horaFinCorregida % 100 - horaInicioCorregida % 100;
-        
+        // switch(dia) evalua que dia es [1-7] y calcula el importe, la distancia y la maxima factura correspondiente a la tarifa aplicable de ese dia.        
         switch (dia){
             case 1: case 2: case 3: case 4: case 5:
             //Si estamos en case 1-5, miramos si es una carrera antes de las 8 o despues, para aplicar la tarifa adecuada.
@@ -142,30 +128,15 @@ public class Taximetro
                 totalDistanciaLaborales+= kilometros;
                 break;
                 
-                /**
-                 * Como te parece mejor el case 6 y 7?
-                 */
-                
             case 6: case 7:
                 if (dia == SABADO) totalCarrerasSabado++; else totalCarrerasDomingo++; 
                 totalDistanciaFinde+= kilometros;
                 esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
                 maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
                 break;
-            // case 6: 
-                // totalCarrerasSabado++; 
-                // totalDistanciaFinde+= kilometros;
-                // esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
-                // maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
-                // break;    
-            // case 7:
-                // totalCarrerasDomingo++;
-                // totalDistanciaFinde+= kilometros;
-                // esteImporte = Math.floor((BASE_AMPLIADA + KM_AMPLIADA * kilometros) * 100)/100;
-                // maxFacturaAmpliada = Math.max(maxFacturaAmpliada,esteImporte);
-                // break; 
             default:
                 esteImporte = 0;
+                minutos = 0;
                 System.out.println("Se ha introducido un dato erroneo");
             }
         // Importe total y tiempo total se actualizan sumando los de esta carrera
@@ -181,11 +152,11 @@ public class Taximetro
      *  
      */
     public void printConfiguracion() {
-        System.out.println("Configuración del taxímetro" + "\n" + "*****************************");
+        System.out.println("Configuración del taxímetro" + '\n' + "***********************");
         System.out.println("Matrícula del vehículo: " + matricula);
         System.out.println("Peso del vehículo en Kg: " + pesoVehiculo);
         System.out.println("Coeficiente aerodinámico: " + coeficienteAerodinamico);
-        System.out.println("Consumo medio estimado por cada 100kms: " + consumoMedio100Kms);
+        System.out.println("Consumo medio estimado por cada 100kms: " + consumoMedio100Kms + '\n');
         
     }
     
@@ -197,17 +168,17 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
-        System.out.println("Estadísticas" + '\n' + "*****************************");
-        System.out.println("Distancia recorrida toda la semana: " + (totalDistanciaLaborales + totalDistanciaFinde));
-        System.out.println("Distancia recorrida fin de semana: " + totalDistanciaFinde);
+        System.out.println("Estadísticas" + '\n' + "******************************");
+        System.out.println("Distancia recorrida toda la semana: " + (totalDistanciaLaborales + totalDistanciaFinde) + "kms");
+        System.out.println("Distancia recorrida fin de semana: " + totalDistanciaFinde + "kms" + '\n');
         System.out.println("Nº carreras días laborables: " + totalCarrerasLaborales);
         System.out.println("Nº carreras sábados: " + totalCarrerasSabado);
-        System.out.println("No carreras domingos: " + totalCarrerasDomingo);
+        System.out.println("Nº carreras domingos: " + totalCarrerasDomingo + '\n');
         System.out.println("Estimación de litros consumidos: " + (totalDistanciaLaborales + totalDistanciaFinde) * (consumoMedio100Kms/100));
-        System.out.println("Importe facturado: " + importeFacturado);
-        System.out.println("Tiempo total en carreras: " + tiempo/60 + "h" + tiempo%60 + "min");
-        System.out.println("Factura máxima tarifa normal: " + maxFacturaNormal);
-        System.out.println("Factura máxima tarifa ampliada: " + maxFacturaAmpliada);
+        System.out.println("Importe facturado: " + importeFacturado + " €" + '\n');
+        System.out.println("Tiempo total en carreras: " + tiempo/60 + " horas y " + tiempo%60 + " minutos");
+        System.out.println("Factura máxima tarifa normal: " + maxFacturaNormal + " €");
+        System.out.println("Factura máxima tarifa ampliada: " + maxFacturaAmpliada + " €");
     }    
     
     /**
@@ -220,7 +191,6 @@ public class Taximetro
         // En esta variable guardaremos los String correspondientes a los maximos entre totalCarrerasSabado,totalCarrerasDomingo,totalCarrerasLaborales
         String diaGuardado = "";
 
-        System.out.println("El dia que mas carreras se han realizado");
         if (totalCarrerasLaborales == maximo) diaGuardado+= " LABORABLES";
 
         if (totalCarrerasSabado == maximo) diaGuardado+= " SABADO";
@@ -231,12 +201,13 @@ public class Taximetro
         return diaGuardado; 
     }    
     /**
-     * Cual te parece mejor?
+     *  SIN USAR Math.max()
+     *  
+     *  Calcula y devuelve un String que representa el nombre del día
+     *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarrerasV2() {
         String diaGuardado = "";
-
-        System.out.println("El dia que mas carreras se han realizado");
         
         if (totalCarrerasLaborales >=totalCarrerasSabado && totalCarrerasLaborales >= totalCarrerasDomingo) 
         diaGuardado+= " LABORABLES";
