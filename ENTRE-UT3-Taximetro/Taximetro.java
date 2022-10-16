@@ -67,8 +67,6 @@ public class Taximetro
     public void configurar(double coefAerodinamico, int pesoKg) {
         pesoVehiculo=pesoKg;
         coeficienteAerodinamico = coefAerodinamico;
-        
-        //consumoMedio100Kms = ((pesoVehiculo*coeficienteAerodinamico)/((double)100));
         consumoMedio100Kms = ((pesoVehiculo*coeficienteAerodinamico)/((double)100));
         
     }
@@ -151,10 +149,6 @@ public class Taximetro
         System.out.println("Consumo medio estimado por cada 100kms:  "+consumoMedio100Kms+"\n");
         System.out.println("\n");
         System.out.println("\n");
-       
- 
-
-        
 
     }
     
@@ -178,7 +172,7 @@ public class Taximetro
         
         double litrosCosumidos= (((totalDistanciaLaborales+totalDistanciaFinde)/100.0)*consumoMedio100Kms);
         System.out.println("Estadísticas");
-        System.out.println("**************************************************************");
+        System.out.println("*********************************************************");
         System.out.println("Distancia recorrida toda la semana: "+(totalDistanciaLaborales+totalDistanciaFinde)+" kms");
         System.out.println("Distancia recorrida fin de semana: "+totalDistanciaFinde+"kms");
         System.out.println("\n");
@@ -207,41 +201,31 @@ public class Taximetro
         String diaMayorNumeroCarreras="";
         if(totalCarrerasLaborales>totalCarrerasSabado){
             if(totalCarrerasLaborales>totalCarrerasDomingo){
-                //System.out.println(" Laborables");
-                diaMayorNumeroCarreras="Laborales";
+                diaMayorNumeroCarreras="LABORALES";
             }else if(totalCarrerasLaborales==totalCarrerasDomingo){
-                //System.out.println(" Laborables  Domingo");
-                diaMayorNumeroCarreras="Laborales Domingo";
+                diaMayorNumeroCarreras="LABORALES DOMINGO";
             }else if(totalCarrerasLaborales<totalCarrerasDomingo){
-                //System.out.println(" Domingo");
-                diaMayorNumeroCarreras="Domingo";
+                diaMayorNumeroCarreras="DOMINGO";
             }
         }else if(totalCarrerasSabado>totalCarrerasLaborales){
             if(totalCarrerasSabado>totalCarrerasDomingo){
-                //System.out.println(" Sabado");
-                diaMayorNumeroCarreras="Sabado";
+                diaMayorNumeroCarreras="SÁBADO";
             }else if(totalCarrerasSabado==totalCarrerasDomingo){
-                //System.out.println(" Sabado Domingo");
-                diaMayorNumeroCarreras="Sabado Domingo";
+                diaMayorNumeroCarreras="SÁBADO DOMINGO";
             }else if(totalCarrerasSabado<totalCarrerasDomingo){
-                //System.out.println(" Domingo");
-                diaMayorNumeroCarreras="Domingo";
+                diaMayorNumeroCarreras="DOMINGO";
             }
             
         }else if(totalCarrerasLaborales==totalCarrerasSabado){
             
             if(totalCarrerasLaborales>totalCarrerasDomingo){
-                //System.out.println(" Laborables Sabado");
-                diaMayorNumeroCarreras="Laborales Sabado";
+                diaMayorNumeroCarreras="LABORALES SÁBADO";
             }else if(totalCarrerasLaborales==totalCarrerasDomingo){
-                //System.out.println(" Laborables Sabado Domingo");
-                diaMayorNumeroCarreras= " Laborales Sabado Domingo";
+                diaMayorNumeroCarreras= " LABORALES SÁBADO DOMINGO";
             }else if(totalCarrerasLaborales<totalCarrerasDomingo){
-                //System.out.println(" Domingo");
-                diaMayorNumeroCarreras="Domingo";
+                diaMayorNumeroCarreras="DOMINGO";
             }
         }
-        //no se como hacer que diaMayorNumeroCarreras guarde mas de un parametro para cuando son empates. porque la comparacion la hace bien
             return diaMayorNumeroCarreras;
         }
             
