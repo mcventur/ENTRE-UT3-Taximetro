@@ -3,27 +3,58 @@
  *  La clase modela un taximetro simplificado que recoge estadísticas
  *  de las carreras realizadas, tiempo total, distancia...
  * 
- * @author  
+ * @Antonio Aguilera  
  */
 public class Taximetro
 {
-    //Constantes y atributos
-    
-    
+    //CONSTANTES
+    private final double BASE_NORMAL = 3.80;
+    private final double BASE_AMPLIADA = 4.00;
+    private final double KM_NORMAL = 0.75;
+    private final double KM_AMPLIADA = 1.10;
+    private final int SABADO = 6;
+    private final int DOMINGO = 7;
+
+    //ATRIBUTOS
+    private String matricula;
+    private int pesoVehiculo;
+    private double coeficienteAerodinamico;
+    private double consumoMedio100Kms;
+    private int totalCarrerasLaborales;
+    private int totalCarrerasSabado;
+    private int totalCarrerasDomingo;
+    private int totalDistanciaLaborales;
+    private int totalDistanciaFinde;
+    private int tiempo;
+    private double importeFacturado;
+    private double maxFacturaNormal;
+    private double maxFacturaAmpliada;
+
     /**
      * Constructor 
      * Inicializa el taximetro con la matricula del vehículo. 
      * El resto de atributos se ponen a 0
      */
-    public Taximetro()    {
-
+    public Taximetro(String queMatricula)    {
+        matricula = queMatricula;
+        pesoVehiculo = 0;
+        coeficienteAerodinamico = 0;
+        consumoMedio100Kms = 0;
+        totalCarrerasSabado = 0;
+        totalCarrerasDomingo = 0;
+        totalDistanciaLaborales = 0;
+        totalDistanciaFinde = 0;
+        tiempo = 0;
+        importeFacturado = 0;
+        maxFacturaNormal = 0;
+        maxFacturaAmpliada = 0;
     }
 
     /**
      * Accesor para la matricula
      */
-    public       getMatricula() {
-
+    public String getMatricula() {
+        return matricula;
     }
 
     /**
@@ -31,7 +62,9 @@ public class Taximetro
      * (Leer enunciado)
      */
     public void configurar(double coefAerodinamico, int pesoKg) {
-
+        coeficienteAerodinamico = coefAerodinamico;
+        consumoMedio100Kms = (pesoKg * coefAerodinamico) / 100;
+        pesoVehiculo = pesoKg;
     }
 
     /**
@@ -47,8 +80,61 @@ public class Taximetro
      *   
      *   (leer enunciado del ejercicio)
      */
-    public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
-
+     public void registrarCarrera(int kilometros, int dia, int horaInicio, int horaFin) {
+        int minutosInicio = (horaInicio / 100)* 60 + (horaInicio % 100);
+        int minutosFin = (horaFin / 100)* 60 + (horaFin % 100);
+        tiempo += minutosFin - minutosInicio;
+        double maximo;
+        double importe;
+        switch(dia){
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                totalCarrerasLaborales ++;
+                totalDistanciaLaborales += kilometros;
+                if(horaInicio < 800){
+                    importeFacturado += BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                    importe = Math.floor(importeFacturado * 100)/100;
+                    maximo = BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                    if(maxFacturaAmpliada < maximo){
+                        importe = BASE_AMPLIADA + (KM_AMPLIADA * kilometros);
+                        maxFacturaAmpliada = importe;
+                    }
+                }
+                else{
+                    importeFacturado += BASE_NORMAL + KM_NORMAL * kilometros;
+                    importe = Math.floor(importeFacturado * 100)/100;
+                    maximo = BASE_NORMAL + KM_NORMAL * kilometros;
+                    if(maxFacturaNormal < maximo){
+                        importe = BASE_NORMAL + (KM_NORMAL * kilometros);
+                        maxFacturaNormal = importe;
+                    }
+                }
+            break;
+            case SABADO:
+                totalCarrerasSabado++;
+                totalDistanciaFinde += kilometros;
+                importeFacturado += BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                importe = Math.floor(importeFacturado * 100)/100;
+                maximo = BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                    if(maxFacturaAmpliada < maximo){
+                        importe = BASE_AMPLIADA + (KM_AMPLIADA * kilometros);
+                        maxFacturaAmpliada = importe;
+                    }
+            break;
+            case DOMINGO:
+                totalCarrerasDomingo++;
+                totalDistanciaFinde += kilometros;
+                importeFacturado += BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                importe = Math.floor(importeFacturado * 100)/100;
+                maximo = BASE_AMPLIADA + KM_AMPLIADA * kilometros;
+                    if(maxFacturaAmpliada < maximo){
+                        importe = BASE_AMPLIADA + (KM_AMPLIADA * kilometros);
+                        maxFacturaAmpliada = importe;
+                    }
+        }
     }
     
     /**
@@ -59,11 +145,13 @@ public class Taximetro
      *  
      */
     public void printConfiguracion() {
-
-        
-
+        System.out.println("Configuracion del taximtro");
+        System.out.println("\n*******************************************");
+        System.out.println("\nPeso del vehículo en Kg: " + pesoVehiculo);
+        System.out.println("\nCoeficiente aerodinamico:" + coeficienteAerodinamico);
+        System.out.println("\nConsumo medio estimado por cada 100kms: " + consumoMedio100Kms);
     }
-    
+
     /**
      * Muestra en pantalla información acerca de la distancia recorrida,
      * carreras, tiempo total, ....
@@ -72,20 +160,44 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
-
-        
-
+        int horas = tiempo / 60;
+        int minu = tiempo % 60;
+        int totalDistancia = totalDistanciaLaborales + totalDistanciaFinde;
+        double consumoAproximado = (totalDistancia * consumoMedio100Kms) / 100;
+        System.out.println("\nEstadisticas");
+        System.out.println("**************************");
+        System.out.println("Distancia recorrida toda la semana: " + totalDistancia + " kms");
+        System.out.println("Distancia recorrida fin de semana: " + totalDistanciaFinde + " kms");
+        System.out.println("\nNº carreras dias laborales: " + totalCarrerasLaborales);
+        System.out.println("Nº carreras dias sábados: " + totalCarrerasSabado);
+        System.out.println("Nº carreras dias domingos: " + totalCarrerasDomingo);
+        System.out.println("\nEstimacion de litros consumidos: " + consumoAproximado);
+        System.out.println("importe facturado: " + importeFacturado + " €");
+        System.out.println("\nTiempo total de carreras: " + horas + " horas" + " y " + minu + " minutos");
+        System.out.println("Factura máxima tarifa normal: " + maxFacturaNormal + " €");
+        System.out.println("Factura máxima tarifa ampliada: " + maxFacturaAmpliada + " €");
     }    
-    
+
     /**
      *  Calcula y devuelve un String que representa el nombre del día
      *  en el que se han realizado más carreras - "SÁBADO"   "DOMINGO" o  "LABORABLES"
      */
     public String diaMayorNumeroCarreras() {
-
-         
-
-    }    
+        if(totalCarrerasLaborales > totalCarrerasSabado && totalCarrerasLaborales > totalCarrerasDomingo || totalCarrerasLaborales == totalCarrerasDomingo) {
+            if(totalCarrerasLaborales == totalCarrerasSabado){
+                return "LABORALES SABADO";
+            }else if(totalCarrerasLaborales == totalCarrerasDomingo){
+                return "LABORALES DOMINGO";
+            }else{
+                return "LABORALES";
+            }
+        }else if (totalCarrerasSabado > totalCarrerasLaborales && totalCarrerasSabado>totalCarrerasDomingo || totalCarrerasSabado == totalCarrerasDomingo ){
+            if(totalCarrerasSabado == totalCarrerasDomingo){
+                return  "SABADO DOMINGO";
+            }            
+        }
+        return "DOMINGO";
+    }
     
     /**
      * Restablecer los valores iniciales del taximetro
@@ -94,9 +206,18 @@ public class Taximetro
      *  
      */    
     public void reset() {
-
-        
-
+        pesoVehiculo = 0;
+        coeficienteAerodinamico = 0;
+        consumoMedio100Kms = 0;
+        totalCarrerasLaborales = 0;
+        totalCarrerasSabado = 0;
+        totalCarrerasDomingo = 0;
+        totalDistanciaLaborales = 0;
+        totalDistanciaFinde = 0;
+        tiempo = 0;
+        importeFacturado = 0;
+        maxFacturaNormal = 0;
+        maxFacturaAmpliada = 0;
     }    
 
 }
