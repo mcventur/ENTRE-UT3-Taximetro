@@ -61,7 +61,7 @@ public class Taximetro
      */
     public void configurar(double coefAerodinamico, int pesoKg) {
         
-        if(coefAerodinamico<0 &&coefAerodinamico<1 )
+        if(coefAerodinamico > 0 && coefAerodinamico < 1 )
         {
             coeficienteAerodinamico = coefAerodinamico;
         }
@@ -107,10 +107,12 @@ public class Taximetro
                 break;
             case 6:
                 totalCarrerasSabado ++;
+                totalDistanciaFinde += kilometros;
                 Ampliada(kilometros);
                 break;
             case 7:
                 totalCarrerasDomingo ++;
+                totalDistanciaFinde += kilometros;
                 Ampliada(kilometros);
                 break;
             default:
@@ -153,7 +155,6 @@ public class Taximetro
      */
     public void Ampliada(int kilometros)
     {
-        totalDistanciaFinde += kilometros;
         importeFacturado += BASE_AMPLIADA + KM_AMPLIADA*kilometros;
         importeFacturado=(Math.floor(importeFacturado*100));
         importeFacturado/=100; //preguntar
