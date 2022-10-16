@@ -14,11 +14,11 @@ public class Taximetro
     private final double KM_NORMAL = 0.75;
     private final double KM_AMPLIADO = 1.10;
     //Constantes para indicar el nº de día de la semana
-    private final int SÁBADO = 6;
+    private final int SABADO = 6;
     private final int DOMINGO = 7;
     //Atributos
     private String matricula;
-    private double pesoVehiculo;
+    private int pesoVehiculo;
     private double coeficienteAerodinamico;
     private double consumoMedio100Kms;
     //Para recuento de carreras:
@@ -100,7 +100,6 @@ public class Taximetro
             minutosFinal = (horaFin / 100) * 60 + (horaFin % 100);
             tiempoCarrera = minutosFinal - minutosInicio;
             tiempo += tiempoCarrera;
-           
             if (importeCarrera > maxFacturaNormal){
                 maxFacturaNormal = importeCarrera;
             }
@@ -117,11 +116,11 @@ public class Taximetro
             minutosFinal = (horaFin / 100) * 60 + (horaFin % 100);
             tiempoCarrera = minutosFinal - minutosInicio;
             tiempo += tiempoCarrera;
-            
             if (importeCarrera > maxFacturaAmpliada){
                 maxFacturaAmpliada = importeCarrera;
             }
             break;
+            
         case 7:
             totalCarrerasDomingo++;
             totalDistanciaFinde = totalDistanciaFinde + kilometros;
@@ -170,13 +169,16 @@ public class Taximetro
     System.out.println (""); 
     System.out.println ("Estadísticas");
     System.out.println ("*****************************");
-    System.out.println ("Distancia recorrida toda la semana: " + totalDistanciaLaborales + "Kms");
+    System.out.println ("Distancia recorrida toda la semana: " + (totalDistanciaLaborales + totalDistanciaFinde) + "Kms");
     System.out.println ("Distancia recorrida fin de semana: " + totalDistanciaFinde + "Kms");
+    System.out.println (""); 
     System.out.println ("Nº carreras dias laborables: " + totalCarrerasLaborales);
-    System.out.println ("Nº carreras sábados: " + totalCarrerasSabado);
+    System.out.println ("Nº carreras sábados: " + totalCarrerasSabado); 
     System.out.println ("Nº carreras domingos: " + totalCarrerasDomingo);
-    System.out.println ("Estimación de litros consumidos: " + (consumoMedio100Kms / 100) * (totalDistanciaLaborales + totalDistanciaFinde) + " litros"); 
+    System.out.println ("");
+    System.out.println ("Estimación de litros consumidos: " + (consumoMedio100Kms / 100) * (totalDistanciaLaborales + totalDistanciaFinde)); 
     System.out.println ("Importe facturado: " + importeFacturado + "€");
+    System.out.println ("");
     System.out.println ("Tiempo total en carreras: " + tiempo);
     System.out.println ("Factura máxima tarifa normal: " + maxFacturaNormal + "€");
     System.out.println ("Factura máxima tarifa ampliada: " + maxFacturaAmpliada + "€");
