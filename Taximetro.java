@@ -185,15 +185,15 @@ public class Taximetro
     public String diaMayorNumeroCarreras() {
         if(totalCarrerasLaborales > totalCarrerasSabado && totalCarrerasLaborales > totalCarrerasDomingo || totalCarrerasLaborales == totalCarrerasDomingo) {
             if(totalCarrerasLaborales == totalCarrerasSabado){
-                return "LABORALES  SÁBADO";
+                return "LABORALES SABADO";
             }else if(totalCarrerasLaborales == totalCarrerasDomingo){
-                return "LABORALES  DOMINGO";
+                return "LABORALES DOMINGO";
             }else{
                 return "LABORALES";
             }
         }else if (totalCarrerasSabado > totalCarrerasLaborales && totalCarrerasSabado>totalCarrerasDomingo || totalCarrerasSabado == totalCarrerasDomingo ){
             if(totalCarrerasSabado == totalCarrerasDomingo){
-                return  "SABADO  DOMIGO";
+                return  "SABADO DOMINGO";
             }            
         }
         return "DOMINGO";
