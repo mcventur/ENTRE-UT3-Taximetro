@@ -109,7 +109,7 @@ public class DemoTaximetro
     private void mostrarEstadisticas() {
 
         taximetro.printEstadísticas();
-        System.out.print("\nDía/s con más carreras: " + taximetro.diaMayorNumeroCarreras());
+        System.out.print( "\n"+"Día/s con más carreras: " + taximetro.diaMayorNumeroCarreras());
 
     }
 
