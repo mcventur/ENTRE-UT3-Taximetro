@@ -196,8 +196,17 @@ public class Taximetro
         else if (totalCarrerasSabado > totalCarrerasLaborales & totalCarrerasSabado > totalCarrerasDomingo) {
             return  "SÁBADO";
         }
-        else {
+        else if (totalCarrerasDomingo > totalCarrerasLaborales & totalCarrerasDomingo > totalCarrerasSabado){
             return "DOMINGO";
+        } 
+        else if (totalCarrerasLaborales == totalCarrerasSabado) {
+            return "SABADO Y LABORALES";
+        }
+        else if (totalCarrerasDomingo == totalCarrerasLaborales) {
+            return "DOMINGO Y LABORALES";
+        }
+        else {
+            return "SABADO Y LABORALES";
         }
     }    
     
