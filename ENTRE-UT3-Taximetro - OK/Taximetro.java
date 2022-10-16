@@ -114,6 +114,8 @@ public class Taximetro
         if(dia == 7){
             totalCarrerasDomingo++;
         }
+        
+        tiempo += horaFin - horaInicio;
     }
     
     /**
@@ -139,7 +141,16 @@ public class Taximetro
      *  
      */
     public void printEstadísticas() {
-        double litros = (((totalDistanciaLaborales + totalDistanciaFinde)/100) * consumoMedio100kms);
+        double litros = (((totalDistanciaLaborales + totalDistanciaFinde) * consumoMedio100kms) / 100);
+        
+        double hor;
+        double min;
+        hor = (tiempo/100);
+        min = (tiempo % 60);
+        if(min>=60){
+            min = (min-60);
+            hor = hor+1;
+        }
         
         System.out.println("Estadísticas");
         System.out.println("***************************");
@@ -151,12 +162,12 @@ public class Taximetro
         System.out.println("Nº carreras sabados: " + totalCarrerasSabado);
         System.out.println("Nº carreras domingos: " + totalCarrerasDomingo);
         
-        System.out.println("Estimación de litros consumidos: " + litros);
+        System.out.println("Estimación de litros consumidos: " + Math.round(litros*1000d) / 1000d);
         System.out.println("Importe facturado: " + importeFacturado);
         
-        System.out.println("Tiempo total en carreras: " + );
-        System.out.println("Factura máxima tarifa normal: " + );
-        System.out.println("Factura máxima tarifa ampliada: " + );
+        System.out.println("Tiempo total en carreras: " + (int)hor + " horas y " + (int)(min) + " minutos");
+        System.out.println("Factura máxima tarifa normal: " + maxFacturaNormal);
+        System.out.println("Factura máxima tarifa ampliada: " + maxFacturaAmpliada);
 
     }    
     
